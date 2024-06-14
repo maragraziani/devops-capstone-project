@@ -124,3 +124,47 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
     # ADD YOUR TEST CASES HERE ...
+
+    def test_list_accounts(self):
+        """It should Get a list of accounts"""
+        # creates a list of accounts
+        self._create_accounts(5)
+        #_ = AccountFactory()
+        # list all accounts in a dict
+        response = self.client.get(BASE_URL)
+        #response = Account.all()
+        # assert response is 200_OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), 5)
+        
+    def test_read_account(self):
+        # ensure there is at least one account created
+        account = AccountFactory()
+        account_id = account.id
+
+        response_find_account = Account.find(by_id=account_id)
+        self.assertEqual(response_find_account.status_code, status.HTTP_200_OK)
+        
+        #TODO: delete id
+        response_find_account.delete()
+        response_find_account = Account.find(by_id=account_id)
+        self.assertEqual(response_find_account.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_update_account(self):
+        #TODO: write test
+        account = AccountFactory()
+        account_id = account.id
+        response_find_account = Account.find(by_id=account_id)
+        self.assertEqual(response_find_account.status_code, status.HTTP_200_OK)
+
+    
+    def test_delete_account(self):
+        # ensure there is at least one account created
+        account = AccountFactory()
+        account_id = account.id
+        response_find_account = Account.find(by_id=account_id)
+        self.assertEqual(response_find_account.status_code, status.HTTP_200_OK)
+        response_delete = response_find_account.delete()
+        self.assertEqual(response_find_account.status_code, status.HTTP_204_NO_CONTENT)
+
