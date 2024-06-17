@@ -75,7 +75,7 @@ def list_accounts():
     else:
         results = []
     app.logger.info("[%s] accounts returned", len(results))
-    
+
     return jsonify(results), status.HTTP_200_OK
 
 
