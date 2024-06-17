@@ -11,7 +11,8 @@ from service.models import Account, DataValidationError, db
 from tests.factories import AccountFactory
 
 DATABASE_URI = os.getenv(
-    "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
+    "DATABASE_URI",
+    "postgresql://postgres:postgres@localhost:5432/postgres",
 )
 
 
@@ -36,7 +37,9 @@ class TestAccount(unittest.TestCase):
 
     def setUp(self):
         """This runs before each test"""
-        db.session.query(Account).delete()  # clean up the last tests
+        db.session.query(
+            Account
+        ).delete()  # clean up the last tests
         db.session.commit()
 
     def tearDown(self):
@@ -62,9 +65,15 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(account.id, None)
         self.assertEqual(account.name, fake_account.name)
         self.assertEqual(account.email, fake_account.email)
-        self.assertEqual(account.address, fake_account.address)
-        self.assertEqual(account.phone_number, fake_account.phone_number)
-        self.assertEqual(account.date_joined, fake_account.date_joined)
+        self.assertEqual(
+            account.address, fake_account.address
+        )
+        self.assertEqual(
+            account.phone_number, fake_account.phone_number
+        )
+        self.assertEqual(
+            account.date_joined, fake_account.date_joined
+        )
 
     def test_add_a_account(self):
         """It should Create an account and add it to the database"""
@@ -87,9 +96,15 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(found_account.id, account.id)
         self.assertEqual(found_account.name, account.name)
         self.assertEqual(found_account.email, account.email)
-        self.assertEqual(found_account.address, account.address)
-        self.assertEqual(found_account.phone_number, account.phone_number)
-        self.assertEqual(found_account.date_joined, account.date_joined)
+        self.assertEqual(
+            found_account.address, account.address
+        )
+        self.assertEqual(
+            found_account.phone_number, account.phone_number
+        )
+        self.assertEqual(
+            found_account.date_joined, account.date_joined
+        )
 
     def test_update_account(self):
         """It should Update an account"""
@@ -148,12 +163,22 @@ class TestAccount(unittest.TestCase):
         account = AccountFactory()
         serial_account = account.serialize()
         self.assertEqual(serial_account["id"], account.id)
-        self.assertEqual(serial_account["name"], account.name)
-        self.assertEqual(serial_account["email"], account.email)
-        self.assertEqual(serial_account["address"], account.address)
-        self.assertEqual(serial_account["phone_number"], account.phone_number)
         self.assertEqual(
-            serial_account["date_joined"], str(account.date_joined)
+            serial_account["name"], account.name
+        )
+        self.assertEqual(
+            serial_account["email"], account.email
+        )
+        self.assertEqual(
+            serial_account["address"], account.address
+        )
+        self.assertEqual(
+            serial_account["phone_number"],
+            account.phone_number,
+        )
+        self.assertEqual(
+            serial_account["date_joined"],
+            str(account.date_joined),
         )
 
     def test_deserialize_an_account(self):
@@ -165,16 +190,26 @@ class TestAccount(unittest.TestCase):
         new_account.deserialize(serial_account)
         self.assertEqual(new_account.name, account.name)
         self.assertEqual(new_account.email, account.email)
-        self.assertEqual(new_account.address, account.address)
-        self.assertEqual(new_account.phone_number, account.phone_number)
-        self.assertEqual(new_account.date_joined, account.date_joined)
+        self.assertEqual(
+            new_account.address, account.address
+        )
+        self.assertEqual(
+            new_account.phone_number, account.phone_number
+        )
+        self.assertEqual(
+            new_account.date_joined, account.date_joined
+        )
 
     def test_deserialize_with_key_error(self):
         """It should not Deserialize an account with a KeyError"""
         account = Account()
-        self.assertRaises(DataValidationError, account.deserialize, {})
+        self.assertRaises(
+            DataValidationError, account.deserialize, {}
+        )
 
     def test_deserialize_with_type_error(self):
         """It should not Deserialize an account with a TypeError"""
         account = Account()
-        self.assertRaises(DataValidationError, account.deserialize, [])
+        self.assertRaises(
+            DataValidationError, account.deserialize, []
+        )
