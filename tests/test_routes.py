@@ -5,6 +5,7 @@ Test cases can be run with the following:
   nosetests -v --with-spec --spec-color
   coverage report -m
 """
+
 import os
 import logging
 from unittest import TestCase
@@ -92,7 +93,7 @@ class TestAccountService(TestCase):
         response = self.client.post(
             BASE_URL,
             json=account.serialize(),
-            content_type="application/json"
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -110,18 +111,20 @@ class TestAccountService(TestCase):
 
     def test_bad_request(self):
         """It should not Create an Account when sending the wrong data"""
-        response = self.client.post(BASE_URL, json={"name": "not enough data"})
+        response = self.client.post(
+            BASE_URL, json={"name": "not enough data"}
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_unsupported_media_type(self):
         """It should not Create an Account when sending the wrong media type"""
         account = AccountFactory()
         response = self.client.post(
-            BASE_URL,
-            json=account.serialize(),
-            content_type="test/html"
+            BASE_URL, json=account.serialize(), content_type="test/html"
         )
-        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        self.assertEqual(
+            response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+        )
 
     # ADD YOUR TEST CASES HERE ...
 
@@ -130,7 +133,7 @@ class TestAccountService(TestCase):
         self._create_accounts(5)
         response = self.client.get(BASE_URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
     def test_read_account(self):
         test_account = self._create_accounts(1)[0]
         response = self.client.get(f"{BASE_URL}/{test_account.id}")
@@ -141,12 +144,12 @@ class TestAccountService(TestCase):
         self.assertEqual(data["name"], test_account.name)
 
         response = self.client.delete(f"{BASE_URL}/{test_account.id}")
-        
+
         response = self.client.get(f"{BASE_URL}/{test_account.id}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         data = response.get_json()
         self.assertIn("was not found", data["message"])
-    
+
     def test_update_account(self):
         """It should Update an existing Account"""
         # create an Account to update
@@ -157,11 +160,13 @@ class TestAccountService(TestCase):
         # update the account
         new_account = resp.get_json()
         new_account["name"] = "Something Known"
-        resp = self.client.put(f"{BASE_URL}/{new_account['id']}", json=new_account)
+        resp = self.client.put(
+            f"{BASE_URL}/{new_account['id']}", json=new_account
+        )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_account = resp.get_json()
         self.assertEqual(updated_account["name"], "Something Known")
-    
+
     def test_delete_account(self):
         """It should delete an account."""
         accounts = self._create_accounts(5)
