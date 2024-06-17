@@ -67,14 +67,8 @@ def list_accounts():
     app.logger.info("Request to list accounts...")
 
     accounts = []
-    name = request.args.get("name")
-
-    if name:
-        app.logger.info("Find by name: %s", name)
-        accounts = Account.find_by_name(name)
-    else:
-        app.logger.info("Find all")
-        accounts = Account.all()
+    app.logger.info("Find all")
+    accounts = Account.all()
 
     results = [product.serialize() for product in accounts]
     app.logger.info("[%s] accounts returned", len(results))
