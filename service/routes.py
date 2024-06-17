@@ -64,15 +64,19 @@ def create_accounts():
 @app.route("/accounts", methods=["GET"])
 def list_accounts():
     """Returns a list of accounts"""
+
     app.logger.info("Request to list accounts...")
 
     accounts = []
     app.logger.info("Find all")
     accounts = Account.all()
-
-    results = [product.serialize() for product in accounts]
+    if len(accounts)>1:
+        results = [account.serialize() for account in accounts]
+    else:
+        results = []
     app.logger.info("[%s] accounts returned", len(results))
-    return results, status.HTTP_200_OK
+    
+    return jsonify(results), status.HTTP_200_OK
 
 
 ######################################################################
