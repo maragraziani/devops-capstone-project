@@ -163,17 +163,17 @@ class TestAccountService(TestCase):
         response = self.client.post(BASE_URL, json=test_account.serialize())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     
-    # def test_delete_account(self):
-    #     """It should delete an account."""
-    #     accounts = self._create_accounts(5)
-    #     account_to_delete = accounts[0]
-    #     response = self.client.delete(f"{BASE_URL}/{account_to_delete.id}")
-    #     self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-    #     self.assertEqual(len(response.data), 0)
-    #     # # make sure they are deleted
-    #     # response = self.client.get(f"{BASE_URL}/{account_to_delete.id}")
-    #     # self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-    #     # new_count = self.get_product_count()
-    #     # self.assertEqual(new_count, 4)
+    def test_delete_account(self):
+        """It should delete an account."""
+        accounts = self._create_accounts(5)
+        account_to_delete = accounts[0]
+        response = self.client.delete(f"{BASE_URL}/{account_to_delete.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(response.data), 0)
+        # # make sure they are deleted
+        response = self.client.get(f"{BASE_URL}/{account_to_delete.id}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        new_count = self.get_product_count()
+        self.assertEqual(new_count, 4)
 
 
