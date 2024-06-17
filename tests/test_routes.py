@@ -140,15 +140,12 @@ class TestAccountService(TestCase):
         data = response.get_json()
         self.assertEqual(data["name"], test_account.name)
 
-        # response = self.client.delete(f"{BASE_URL}/{test_account.id}")
+        response = self.client.delete(f"{BASE_URL}/{test_account.id}")
         
-        # response = self.client.get(f"{BASE_URL}/{test_account.id}")
-        # self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        # self.assertEqual(len(response.data), 0)
-        
-        # self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        # data = response.get_json()
-        # self.assertIn("was not found", data["message"])
+        response = self.client.get(f"{BASE_URL}/{test_account.id}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        data = response.get_json()
+        self.assertIn("was not found", data["message"])
     
     def test_update_account(self):
         """Tests the Update of an existing account"""
