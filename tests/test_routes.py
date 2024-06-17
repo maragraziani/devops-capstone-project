@@ -157,12 +157,11 @@ class TestAccountService(TestCase):
         # data = response.get_json()
         # self.assertIn("was not found", data["message"])
     
-    # def test_update_account(self):
-    #     """Tests the Update of an existing account"""
-    #     # create a product to update
-    #     test_account = self._create_accounts(1)[0]
-    #     response = self.client.post(BASE_URL, json=test_account.serialize())
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def test_update_account(self):
+        """Tests the Update of an existing account"""
+        test_account = self._create_accounts(1)[0]
+        response = self.client.post(BASE_URL, json=test_account.serialize())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     
     # def test_delete_account(self):
     #     """It should delete an account."""
