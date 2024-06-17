@@ -61,7 +61,24 @@ def create_accounts():
 # LIST ALL ACCOUNTS
 ######################################################################
 
-# ... place you code here to LIST accounts ...
+@app.route("/accounts", methods=["GET"])
+def list_accounts():
+    """Returns a list of accounts"""
+    app.logger.info("Request to list accounts...")
+
+    accounts = []
+    name = request.args.get("name")
+
+    if name:
+        app.logger.info("Find by name: %s", name)
+        accounts = Account.find_by_name(name)
+    else:
+        app.logger.info("Find all")
+        accounts = Account.all()
+
+    results = [product.serialize() for product in accounts]
+    app.logger.info("[%s] accounts returned", len(results))
+    return results, status.HTTP_200_OK
 
 
 ######################################################################
@@ -115,7 +132,7 @@ def update_account(account_id):
 ######################################################################
 
 @app.route("/accounts/<int:account_id>", methods=["DELETE"])
-def delete_products(account_id):
+def delete_accounts(account_id):
     """
     Delete an account
 

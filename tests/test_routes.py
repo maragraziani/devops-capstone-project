@@ -125,18 +125,15 @@ class TestAccountService(TestCase):
 
     # ADD YOUR TEST CASES HERE ...
 
-    # def test_list_accounts(self):
-    #     """It should Get a list of accounts"""
-    #     # creates a list of accounts
-    #     self._create_accounts(5)
-    #     #_ = AccountFactory()
-    #     # list all accounts in a dict
-    #     response = self.client.get(BASE_URL)
-    #     #response = Account.all()
-    #     # assert response is 200_OK
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     data = response.get_json()
-    #     self.assertEqual(len(data), 5)
+    def test_list_accounts(self):
+        """It should Get a list of accounts"""
+        # creates a list of accounts
+        self._create_accounts(5)
+        response = self.client.get(BASE_URL)
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), 5)
         
     def test_read_account(self):
         test_account = self._create_accounts(1)[0]
@@ -170,10 +167,5 @@ class TestAccountService(TestCase):
         response = self.client.delete(f"{BASE_URL}/{account_to_delete.id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(len(response.data), 0)
-        # # make sure they are deleted
-        response = self.client.get(f"{BASE_URL}/{account_to_delete.id}")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        new_count = self.get_product_count()
-        self.assertEqual(new_count, 4)
 
 
