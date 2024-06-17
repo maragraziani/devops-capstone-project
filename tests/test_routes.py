@@ -160,11 +160,16 @@ class TestAccountService(TestCase):
 
     
     def test_delete_account(self):
-        # ensure there is at least one account created
-        account = AccountFactory()
-        account_id = account.id
-        response_find_account = Account.find(by_id=account_id)
-        self.assertEqual(response_find_account.status_code, status.HTTP_200_OK)
-        response_delete = response_find_account.delete()
-        self.assertEqual(response_find_account.status_code, status.HTTP_204_NO_CONTENT)
+        """It should delete an account."""
+        accounts = self._create_accounts(5)
+        account_to_delete = accounts[0]
+        response = self.client.delete(f"{BASE_URL}/{account_to_delete.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(response.data), 0)
+        # make sure they are deleted
+        response = self.client.get(f"{BASE_URL}/{account_to_delete.id}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        new_count = self.get_product_count()
+        self.assertEqual(new_count, 4)
+
 
