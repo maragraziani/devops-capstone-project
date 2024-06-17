@@ -148,6 +148,9 @@ class TestAccountService(TestCase):
         response = self.client.delete(f"{BASE_URL}/{test_account.id}")
         
         response = self.client.get(f"{BASE_URL}/{test_account.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(response.data), 0)
+        
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         data = response.get_json()
         self.assertIn("was not found", data["message"])
